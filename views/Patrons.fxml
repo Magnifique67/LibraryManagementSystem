@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import controllers.PatronController?>
+<?import javafx.scene.layout.HBox?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.PatronController" prefHeight="600">
+    <!-- Patron ID Field and Borrow/Search Buttons -->
+    <HBox spacing="10">
+        <TextField fx:id="patronIdField" promptText="Enter your Patron ID" visible="false" />
+        <Button text="Borrow Selected Book" onAction="#handleBorrowBook" />
+        <TextField fx:id="searchField" promptText="Search for books by title, ISBN, or author name..." />
+        <Button text="Search" onAction="#handleSearchBooks" />
+    </HBox>
+
+    <!-- Books Table -->
+    <TableView fx:id="booksTable" prefHeight="400">
+        <columns>
+            <TableColumn fx:id="bookIdColumn" text="Book ID" prefWidth="100">
+                <cellValueFactory>
+                    <PropertyValueFactory property="id" />
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="bookTitleColumn" text="Title" prefWidth="200">
+                <cellValueFactory>
+                    <PropertyValueFactory property="title" />
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="bookPublishedDateColumn" text="PUBLISHED DATE" prefWidth="150">
+                <cellValueFactory>
+                    <PropertyValueFactory property="published_date" />
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="bookIsbnColumn" text="ISBN" prefWidth="150">
+                <cellValueFactory>
+                    <PropertyValueFactory property="isbn" />
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="bookAvailabilityColumn" text="Availability" prefWidth="100">
+                <cellValueFactory>
+                    <PropertyValueFactory property="availability" />
+                </cellValueFactory>
+            </TableColumn>
+        </columns>
+    </TableView>
+
+    <!-- Transactions Table -->
+    <TableView fx:id="transactionsTable" prefHeight="200">
+        <columns>
+            <TableColumn fx:id="transactionIdColumn" text="Transaction ID" prefWidth="100">
+                <cellValueFactory>
+                    <PropertyValueFactory property="id" />
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="bookIdTransactionColumn" text="Book ID" prefWidth="100">
+                <cellValueFactory>
+                    <PropertyValueFactory property="bookId" />
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="patronIdTransactionColumn" text="Patron ID" prefWidth="100">
+                <cellValueFactory>
+                    <PropertyValueFactory property="patronId" />
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="transactionDateColumn" text="Transaction Date" prefWidth="150">
+                <cellValueFactory>
+                    <PropertyValueFactory property="transactionDate" />
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="dueDateColumn" text="Due Date" prefWidth="150">
+                <cellValueFactory>
+                    <PropertyValueFactory property="dueDate" />
+                </cellValueFactory>
+            </TableColumn>
+        </columns>
+    </TableView>
+</VBox>

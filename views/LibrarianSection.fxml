@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="CENTER" spacing="10" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.LibrarianSectionController">
+    <TabPane tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+            <Tab text="Books">
+                <content>
+                    <AnchorPane fx:id="bookViewContainer"/>
+                </content>
+            </Tab>
+            <Tab text="Authors">
+                <content>
+                    <AnchorPane fx:id="authorViewContainer"/>
+                </content>
+            </Tab>
+        </tabs>
+    </TabPane>
+</VBox>

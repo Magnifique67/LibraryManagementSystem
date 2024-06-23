@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.layout.HBox?>
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.BookController">
+    <HBox spacing="40">
+        <TextField fx:id="searchField" promptText="Search for books by title, ISBN, or author name..." />
+        <Button text="Search" onAction="#handleSearchBooks" />
+    </HBox>
+    <TableView fx:id="bookTable" onMouseClicked="#handleTableClick">
+        <columns>
+            <TableColumn fx:id="bookIdColumn" text="Book ID" />
+            <TableColumn fx:id="titleColumn" text="Title" />
+            <TableColumn fx:id="publishedDateColumn" text="Published Date" />
+            <TableColumn fx:id="isbnColumn" text="ISBN" />
+            <TableColumn fx:id="availabilityColumn" text="Available" />
+        </columns>
+    </TableView>
+
+    <TextField fx:id="titleField" promptText="Title" />
+    <DatePicker fx:id="publishedDateField" promptText="Published Date" />
+    <TextField fx:id="isbnField" promptText="ISBN" />
+
+    <ComboBox fx:id="authorComboBox" promptText="Select Author" />
+
+    <HBox spacing="10">
+        <Button fx:id="addButton" text="Add Book" onAction="#handleAddBook" />
+        <Button fx:id="updateButton" text="Update Book" onAction="#handleUpdateBook" />
+        <Button fx:id="deleteButton" text="Delete Book" onAction="#handleDeleteBook" />
+    </HBox>
+</VBox>
+
