@@ -17,6 +17,8 @@ public class Patrons {
         this.email = email;
         this.address = address;
         this.phone = phone;
+        this.username=username;
+        this.password=password;
     }
     public int getId() {
         return id;

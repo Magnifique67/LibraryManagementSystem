@@ -104,4 +104,17 @@ public class PatronsModel {
             return false;
         }
     }
+    public boolean checkPatronExists(int patronId) throws SQLException {
+        String query = "SELECT COUNT(*) FROM patrons WHERE id = ?";
+        try (PreparedStatement statement = conn.prepareStatement(query)) {
+            statement.setInt(1, patronId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    int count = resultSet.getInt(1);
+                    return count > 0; // Returns true if patron with patronId exists, false otherwise
+                }
+            }
+        }
+        return false; // Return false if no records were found (shouldn't happen with proper setup)
+    }
 }

@@ -42,20 +42,6 @@ public class PatronRegistrationController {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
-        // Debugging statements
-        System.out.println("First Name: " + firstName);
-        System.out.println("Last Name: " + lastName);
-        System.out.println("Email: " + email);
-        System.out.println("Address: " + address);
-        System.out.println("Phone: " + phone);
-        System.out.println("Username: " + username);
-        System.out.println("Password: " + password);
-
-        if (username == null || username.isEmpty()) {
-            showAlert("Error", "Username cannot be null or empty");
-            return;
-        }
-
         Patrons patron = new Patrons(0,firstName, lastName, email, address, phone, username, password);
         PatronsModel model = new PatronsModel();
         boolean isAdded = model.addPatron(patron);

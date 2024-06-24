@@ -8,7 +8,7 @@
 <VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.PatronController" prefHeight="600">
     <!-- Patron ID Field and Borrow/Search Buttons -->
     <HBox spacing="10">
-        <TextField fx:id="patronIdField" promptText="Enter your Patron ID" visible="false" />
+        <TextField fx:id="patronIdField" promptText="Enter your Patron ID" visible="true" />
         <Button text="Borrow Selected Book" onAction="#handleBorrowBook" />
         <TextField fx:id="searchField" promptText="Search for books by title, ISBN, or author name..." />
         <Button text="Search" onAction="#handleSearchBooks" />

@@ -1,6 +1,7 @@
 package config;
 
 import Models.Transactions;
+
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -13,7 +14,7 @@ public class TransactionsModel {
         connection = DatabaseConnection.getConnection();
     }
 
-    public static  void createTable() {
+    public static void createTable() {
         String createTableTransactions = "CREATE TABLE IF NOT EXISTS Transactions ("
                 + "id SERIAL PRIMARY KEY,"
                 + "book_id INTEGER NOT NULL,"
@@ -23,8 +24,8 @@ public class TransactionsModel {
                 + "FOREIGN KEY (book_id) REFERENCES Books(id),"
                 + "FOREIGN KEY (patron_id) REFERENCES Patrons(id)"
                 + ");";
-        try (Connection conn=DatabaseConnection.getConnection();
-                Statement stmt = conn.createStatement()) {
+        try (Connection conn = DatabaseConnection.getConnection();
+             Statement stmt = conn.createStatement()) {
             stmt.execute(createTableTransactions);
             System.out.println("Transactions table created");
         } catch (SQLException e) {
@@ -69,28 +70,24 @@ public class TransactionsModel {
     }
 
     public LinkedList<Transactions> getTransactionsByPatron(int patronId) throws SQLException {
-        LinkedList<Transactions> transactions = new LinkedList<>();
-        String selectTransactionsSQL = "SELECT * FROM Transactions WHERE patron_id=?";
-        try (PreparedStatement pstmt = connection.prepareStatement(selectTransactionsSQL)) {
-            pstmt.setInt(1, patronId);
-            try (ResultSet rs = pstmt.executeQuery()) {
-                while (rs.next()) {
+        LinkedList<Transactions> transactionsList = new LinkedList<>();
+        String query = "SELECT * FROM Transactions WHERE patron_id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, patronId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
                     Transactions transaction = new Transactions(
-                            rs.getInt("id"),
-                            rs.getInt("book_id"),
-                            rs.getInt("patron_id"),
-                            rs.getTimestamp("transaction_date"),
-                            rs.getDate("due_date")
+                            resultSet.getInt("id"),
+                            resultSet.getInt("book_id"),
+                            resultSet.getInt("patron_id"),
+                            resultSet.getTimestamp("transaction_date"),
+                            resultSet.getDate("due_date")
                     );
-                    transactions.add(transaction);
-                    System.out.println("Transaction retrieved: " + transaction.getId()); // Debug logging
+                    transactionsList.add(transaction);
                 }
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw e;
         }
-        return transactions;
+        return transactionsList;
     }
 
     public void deleteTransaction(int transactionId) throws SQLException {
@@ -103,7 +100,8 @@ public class TransactionsModel {
             throw e;
         }
     }
-    public void borrowBook(int bookId, int patronId) throws SQLException {
+
+    public void borrowBook(int bookId, int loggedInUserId) throws SQLException {
         String checkAvailabilitySQL = "SELECT availability FROM Books WHERE id = ? AND availability = true";
         String borrowBookSQL = "INSERT INTO Transactions (book_id, patron_id, transaction_date, due_date) VALUES (?, ?, ?, ?)";
         String updateBookAvailabilitySQL = "UPDATE Books SET availability = false WHERE id = ?";
@@ -132,7 +130,7 @@ public class TransactionsModel {
 
             // Insert into transactions table
             pstmtBorrow.setInt(1, bookId);
-            pstmtBorrow.setInt(2, patronId);
+            pstmtBorrow.setInt(2, loggedInUserId); // Use the logged-in user's ID
             pstmtBorrow.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
             pstmtBorrow.setDate(4, Date.valueOf(LocalDate.now().plusWeeks(2))); // assuming 2 weeks borrowing period
             pstmtBorrow.executeUpdate();
@@ -168,7 +166,6 @@ public class TransactionsModel {
         }
     }
 
-
     public void returnBook(int bookId) throws SQLException {
         String checkAvailabilitySQL = "SELECT availability FROM Books WHERE id = ?";
         String updateBookAvailabilitySQL = "UPDATE Books SET availability = true WHERE id = ?";
@@ -197,7 +194,5 @@ public class TransactionsModel {
         } else {
             throw new SQLException("Book with ID " + bookId + " is already available.");
         }
-
     }
-
 }
