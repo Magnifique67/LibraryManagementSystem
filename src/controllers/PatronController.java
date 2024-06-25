@@ -8,13 +8,12 @@ import config.PatronsModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Callback;
 import session.Session;
 
+import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -33,6 +32,8 @@ public class PatronController {
     @FXML
     private TableColumn<Books, Boolean> bookAvailabilityColumn;
     @FXML
+    private TableColumn<Books, Date> bookPublishedDateColumn;
+    @FXML
     private TextField searchField;
 
     @FXML
@@ -40,23 +41,29 @@ public class PatronController {
     @FXML
     private TableColumn<Transactions, Integer> transactionIdColumn;
     @FXML
-    private TableColumn<Transactions, Integer> bookIdTransactionColumn;
+    private TableColumn<Transactions, String> bookTitleTransactionColumn;
     @FXML
-    private TableColumn<Transactions, Integer> patronIdTransactionColumn;
+    private TableColumn<Transactions, String> patronFirstNameColumn;
+    @FXML
+    private TableColumn<Transactions, String> patronLastNameColumn;
     @FXML
     private TableColumn<Transactions, Timestamp> transactionDateColumn;
     @FXML
     private TableColumn<Transactions, LocalDate> dueDateColumn;
+    @FXML
+    private TableColumn<Transactions, Boolean> returnedColumn;
+    @FXML
+    private TableColumn<Transactions, Void> actionsColumn; // Added actions column
 
     private BooksModel booksModel;
     private TransactionsModel transactionsModel;
-    private  PatronsModel patronsModel;
+    private PatronsModel patronsModel;
 
     public PatronController() {
         try {
             booksModel = new BooksModel();
             transactionsModel = new TransactionsModel();
-            patronsModel=new PatronsModel();
+            patronsModel = new PatronsModel();
         } catch (SQLException e) {
             // Handle exception appropriately, e.g., log it or show an error message
             e.printStackTrace();
@@ -68,15 +75,26 @@ public class PatronController {
         // Initialize books table columns
         bookIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         bookTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+        bookPublishedDateColumn.setCellValueFactory(new PropertyValueFactory<>("published_date"));
         bookIsbnColumn.setCellValueFactory(new PropertyValueFactory<>("isbn"));
         bookAvailabilityColumn.setCellValueFactory(new PropertyValueFactory<>("availability"));
 
         // Initialize transactions table columns
         transactionIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        bookIdTransactionColumn.setCellValueFactory(new PropertyValueFactory<>("book_id"));
-        patronIdTransactionColumn.setCellValueFactory(new PropertyValueFactory<>("patron_id"));
+        bookTitleTransactionColumn.setCellValueFactory(new PropertyValueFactory<>("book_title"));
+        patronFirstNameColumn.setCellValueFactory(new PropertyValueFactory<>("patron_firstName"));
+        patronLastNameColumn.setCellValueFactory(new PropertyValueFactory<>("patron_lastName"));
         transactionDateColumn.setCellValueFactory(new PropertyValueFactory<>("transaction_date"));
         dueDateColumn.setCellValueFactory(new PropertyValueFactory<>("due_date"));
+        returnedColumn.setCellValueFactory(new PropertyValueFactory<>("returned"));
+
+        // Set the cell factory for the actions column
+        actionsColumn.setCellFactory(new Callback<TableColumn<Transactions, Void>, TableCell<Transactions, Void>>() {
+            @Override
+            public TableCell<Transactions, Void> call(final TableColumn<Transactions, Void> param) {
+                return new ActionCell(PatronController.this);
+            }
+        });
 
         // Load all books and patron transactions
         try {
@@ -113,14 +131,14 @@ public class PatronController {
             int bookId = getSelectedBookId();
             int patronId = Session.getPatronId();
 
-            // Check if a patron is logged in
-            if (patronId == -1) {
-                showAlert(Alert.AlertType.ERROR, "Error", "Please log in as a patron.");
+            // Debug logging to verify patron ID retrieval
+            System.out.println("Patron ID Retrieved: " + patronId);
+
+            // Check if patron ID is 0 (or any other unexpected value)
+            if (patronId == 0) {
+                showAlert(Alert.AlertType.ERROR, "Error", "Patron ID is invalid or not set correctly.");
                 return;
             }
-
-            // Log patron ID for debugging purposes
-            System.out.println("Patron ID: " + patronId);
 
             // Check if the patron exists in the database
             if (!patronsModel.checkPatronExists(patronId)) {
@@ -148,7 +166,6 @@ public class PatronController {
         }
     }
 
-
     @FXML
     private void loadPatronTransactions() {
         try {
@@ -167,11 +184,84 @@ public class PatronController {
         return selectedBook != null ? selectedBook.getId() : -1;
     }
 
-    private void showAlert(Alert.AlertType alertType, String title, String contentText) {
+    @FXML
+    public void handleUpdateTransaction(Transactions selectedTransaction) {
+        if (selectedTransaction == null) {
+            showAlert(Alert.AlertType.WARNING, "No Selection", "Please select a transaction to update.");
+            return;
+        }
+
+        // Show a DatePicker for the user to select a new due date
+        DatePicker newDueDatePicker = new DatePicker();
+        newDueDatePicker.setPromptText("Select new due date");
+
+        // Create a dialog for updating the due date
+        Alert dialog = new Alert(Alert.AlertType.CONFIRMATION);
+        dialog.setTitle("Update Due Date");
+        dialog.setHeaderText("Update Due Date for Transaction ID: " + selectedTransaction.getId());
+        dialog.getDialogPane().setContent(newDueDatePicker);
+
+        // Add OK and Cancel buttons
+        ButtonType buttonTypeUpdate = new ButtonType("Update", ButtonBar.ButtonData.OK_DONE);
+        ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+        dialog.getButtonTypes().setAll(buttonTypeUpdate, buttonTypeCancel);
+
+        // Handle button actions
+        dialog.showAndWait().ifPresent(buttonType -> {
+            if (buttonType == buttonTypeUpdate) {
+                try {
+                    // Convert LocalDate from DatePicker to Timestamp for SQL
+                    LocalDate newDueDate = newDueDatePicker.getValue();
+                    Date newDueTimestamp = Date.valueOf(newDueDate);
+
+                    // Update the transaction in the database
+                    selectedTransaction.setDue_date(newDueTimestamp);
+                    transactionsModel.updateTransaction(selectedTransaction);
+
+                    // Refresh transactions table
+                    loadPatronTransactions();
+
+                    showAlert(Alert.AlertType.INFORMATION, "Success", "Due Date updated successfully!");
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    showAlert(Alert.AlertType.ERROR, "Error", "Failed to update Due Date. Please try again.");
+                }
+            }
+        });
+    }
+
+    @FXML
+    public void handleReturnTransaction(Transactions selectedTransaction) {
+        if (selectedTransaction == null) {
+            showAlert(Alert.AlertType.WARNING, "No Selection", "Please select a transaction to return.");
+            return;
+        }
+
+        try {
+            // Mark the transaction as returned
+            transactionsModel.returnBook(selectedTransaction.getId());
+
+            // Update book availability
+            Books returnedBook = booksModel.getBookById(selectedTransaction.getBook_id());
+            returnedBook.setAvailability(true);
+            booksModel.updateBook(returnedBook);
+
+            // Refresh tables
+            loadAllBooks();
+            loadPatronTransactions();
+
+            showAlert(Alert.AlertType.INFORMATION, "Success", "Book returned successfully!");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Error", "Failed to return book. Please try again.");
+        }
+    }
+
+    private void showAlert(Alert.AlertType alertType, String title, String message) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
         alert.setHeaderText(null);
-        alert.setContentText(contentText);
+        alert.setContentText(message);
         alert.showAndWait();
     }
 }

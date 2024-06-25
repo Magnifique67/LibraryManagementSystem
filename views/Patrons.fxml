@@ -2,13 +2,12 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
-<?import controllers.PatronController?>
 <?import javafx.scene.layout.HBox?>
 
 <VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.PatronController" prefHeight="600">
     <!-- Patron ID Field and Borrow/Search Buttons -->
     <HBox spacing="10">
-        <TextField fx:id="patronIdField" promptText="Enter your Patron ID" visible="true" />
+        <TextField fx:id="patronIdField" promptText="Enter your Patron ID" visible="false" />
         <Button text="Borrow Selected Book" onAction="#handleBorrowBook" />
         <TextField fx:id="searchField" promptText="Search for books by title, ISBN, or author name..." />
         <Button text="Search" onAction="#handleSearchBooks" />
@@ -27,7 +26,7 @@
                     <PropertyValueFactory property="title" />
                 </cellValueFactory>
             </TableColumn>
-            <TableColumn fx:id="bookPublishedDateColumn" text="PUBLISHED DATE" prefWidth="150">
+            <TableColumn fx:id="bookPublishedDateColumn" text="Published Date" prefWidth="150">
                 <cellValueFactory>
                     <PropertyValueFactory property="published_date" />
                 </cellValueFactory>
@@ -53,26 +52,37 @@
                     <PropertyValueFactory property="id" />
                 </cellValueFactory>
             </TableColumn>
-            <TableColumn fx:id="bookIdTransactionColumn" text="Book ID" prefWidth="100">
+            <TableColumn fx:id="bookTitleTransactionColumn" text="Book Title" prefWidth="150">
                 <cellValueFactory>
-                    <PropertyValueFactory property="bookId" />
+                    <PropertyValueFactory property="book_title" />
                 </cellValueFactory>
             </TableColumn>
-            <TableColumn fx:id="patronIdTransactionColumn" text="Patron ID" prefWidth="100">
+            <TableColumn fx:id="patronFirstNameColumn" text="Patron First Name" prefWidth="100">
                 <cellValueFactory>
-                    <PropertyValueFactory property="patronId" />
+                    <PropertyValueFactory property="patron_firstName" />
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="patronLastNameColumn" text="Patron Last Name" prefWidth="100">
+                <cellValueFactory>
+                    <PropertyValueFactory property="patron_lastName" />
                 </cellValueFactory>
             </TableColumn>
             <TableColumn fx:id="transactionDateColumn" text="Transaction Date" prefWidth="150">
                 <cellValueFactory>
-                    <PropertyValueFactory property="transactionDate" />
+                    <PropertyValueFactory property="transaction_date" />
                 </cellValueFactory>
             </TableColumn>
             <TableColumn fx:id="dueDateColumn" text="Due Date" prefWidth="150">
                 <cellValueFactory>
-                    <PropertyValueFactory property="dueDate" />
+                    <PropertyValueFactory property="due_date" />
                 </cellValueFactory>
             </TableColumn>
+            <TableColumn fx:id="returnedColumn" text="Returned" prefWidth="100">
+                <cellValueFactory>
+                    <PropertyValueFactory property="returned" />
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="150" />
         </columns>
     </TableView>
 </VBox>

@@ -4,7 +4,7 @@
 
 <VBox alignment="CENTER" spacing="10" xmlns:fx="http://javafx.com/javafx" fx:controller="controllers.LoginController">
     <children>
-        <Label text="Library Management System - Login" />
+        <Label  text="Library Management System - Login" />
         <TextField fx:id="usernameField" promptText="Username" />
         <PasswordField fx:id="passwordField" promptText="Password" />
         <Button text="Login" onAction="#handleLogin" />

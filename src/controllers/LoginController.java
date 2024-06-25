@@ -3,6 +3,7 @@ package controllers;
 import config.LibrarianModel;
 import config.PatronsModel;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -11,6 +12,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import session.Session;
+
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -32,15 +35,19 @@ public class LoginController {
         // Authenticate librarian
         LibrarianModel librarianModel = new LibrarianModel();
         if (librarianModel.authenticateLibrarian(username, password)) {
+
             openDashboard("/LibrarianSection.fxml");
         }
         // Authenticate patron
         else {
             PatronsModel patronsModel = new PatronsModel();
             if (patronsModel.authenticatePatron(username, password)) {
+                // Set patron ID into session
+                int patronId = patronsModel.getPatronId(username); // Adjust as per your implementation
+                Session.setPatronId(patronId); // Example method to set patron ID in session
                 openDashboard("/Patrons.fxml");
             } else {
-                errorMessage.setVisible(true); // Show error message
+                showAlert(Alert.AlertType.ERROR, "Error", "Invalid credentials. Please try again.");
             }
         }
     }
@@ -65,7 +72,15 @@ public class LoginController {
         } catch (IOException e) {
             System.err.println("Failed to load FXML: " + dashboardFXML);
             e.printStackTrace();
+
         }
+    }
+    private void showAlert(Alert.AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
     @FXML
     private void handleRegister() {
@@ -80,5 +95,4 @@ public class LoginController {
             e.printStackTrace();
         }
     }
-
 }

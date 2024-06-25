@@ -64,6 +64,7 @@ public class AuthorsModel {
             pstmt.setString(1, author.getFirst_name());
             pstmt.setString(2, author.getLast_name());
             pstmt.setString(3, author.getEmail());
+            pstmt.setInt(4, author.getId());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

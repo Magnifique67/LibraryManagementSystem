@@ -1,39 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.layout.HBox?>
-<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.BookController">
+<VBox xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.BookController"
+      prefHeight="550" prefWidth="1000" alignment="CENTER">
     <HBox spacing="40">
+        <Label style="-fx-font-size: 18px; -fx-font-weight: bold; margin-bottom: 10px;" text="Books Management" />
+
         <TextField fx:id="searchField" promptText="Search for books by title, ISBN, or author name..." />
-        <Button text="Search" onAction="#handleSearchBooks" />
+        <Button onAction="#handleSearchBooks" text="Search" />
     </HBox>
     <TableView fx:id="bookTable" onMouseClicked="#handleTableClick">
         <columns>
-            <TableColumn fx:id="bookIdColumn" text="Book ID" />
-            <TableColumn fx:id="titleColumn" text="Title" />
-            <TableColumn fx:id="publishedDateColumn" text="Published Date" />
-            <TableColumn fx:id="isbnColumn" text="ISBN" />
-            <TableColumn fx:id="availabilityColumn" text="Available" />
+            <TableColumn fx:id="bookIdColumn" text="Book ID" prefWidth="200" />
+            <TableColumn fx:id="titleColumn" text="Title" prefWidth="200" />
+            <TableColumn fx:id="publishedDateColumn" prefWidth="200" text="Published Date" />
+            <TableColumn fx:id="isbnColumn" prefWidth="200" text="ISBN" />
+            <TableColumn fx:id="availabilityColumn" prefWidth="200" text="Available" />
         </columns>
     </TableView>
-
+    <Label alignment="CENTER" contentDisplay="CENTER" style="-fx-font-size: 18px; -fx-font-weight: bold; margin-bottom: 10px;" text="Add New " />
+    <VBox layoutX="20" layoutY="20" spacing="10">
     <TextField fx:id="titleField" promptText="Title" />
     <DatePicker fx:id="publishedDateField" promptText="Published Date" />
-    <TextField fx:id="isbnField" promptText="ISBN" />
-
-    <ComboBox fx:id="authorComboBox" promptText="Select Author" />
-
-    <HBox spacing="10">
-        <Button fx:id="addButton" text="Add Book" onAction="#handleAddBook" />
-        <Button fx:id="updateButton" text="Update Book" onAction="#handleUpdateBook" />
-        <Button fx:id="deleteButton" text="Delete Book" onAction="#handleDeleteBook" />
-    </HBox>
+    <TextField fx:id="isbnField"  promptText="ISBN" />
+        <ComboBox fx:id="authorComboBox" promptText="Select Author" />
+   
+   
+   
+       <HBox spacing="10">
+           <Button fx:id="addButton" onAction="#handleAddBook" text="Add Book" />
+           <Button fx:id="updateButton" onAction="#handleUpdateBook" text="Update Book" />
+           <Button fx:id="deleteButton" onAction="#handleDeleteBook" text="Delete Book" />
+       </HBox>
+    </VBox>
 </VBox>
-

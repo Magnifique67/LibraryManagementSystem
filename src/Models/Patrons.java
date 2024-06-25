@@ -10,15 +10,31 @@ public class Patrons {
     private String username;
     private String password;
 
-    public Patrons(int id, String firstName,String lastName, String email, String address, String phone, String username,String password){
+    // Default constructor
+    public Patrons() {
+    }
+
+    // Constructor with all fields
+    public Patrons(int id, String firstName, String lastName, String email, String address, String phone, String username, String password) {
         this.id = id;
-        this.firstName=firstName;
-        this.lastName=lastName;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.address = address;
         this.phone = phone;
-        this.username=username;
-        this.password=password;
+        this.username = username;
+        this.password = password;
+    }
+
+    // Constructor without ID (for adding new patrons)
+    public Patrons(String firstName, String lastName, String email, String address, String phone, String username, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.address = address;
+        this.phone = phone;
+        this.username = username;
+        this.password = password;
     }
     public int getId() {
         return id;

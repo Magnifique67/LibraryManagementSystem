@@ -117,4 +117,30 @@ public class PatronsModel {
         }
         return false; // Return false if no records were found (shouldn't happen with proper setup)
     }
+    public int getPatronId(String username) {
+        int patronId = 0; // Initialize to default value or handle exceptions
+
+        try (PreparedStatement stmt = conn.prepareStatement("SELECT id FROM patrons WHERE username = ?")) {
+
+            stmt.setString(1, username);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                patronId = rs.getInt("id");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // Handle exception appropriately
+        }
+
+        return patronId;
+    }
+    public void updatePatron(Patrons patron) throws SQLException {
+
+    }
+    public void searchPatron(){
+
+
+
+    }
+
 }

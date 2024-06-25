@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- FXML Document for Patron Management -->
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Button?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controllers.PatronsInfo"
+      prefHeight="550" prefWidth="1000">
+
+    <!-- Title for Patron Management -->
+    <Label text="Patron Management" style="-fx-font-size: 18px; -fx-font-weight: bold; margin-bottom: 10px;"/>
+
+    <!-- TableView to display patrons -->
+    <TableView fx:id="patronsTable">
+        <columns>
+            <TableColumn fx:id="patronIDColumn" text="ID" prefWidth="200"/>
+            <TableColumn fx:id="firstNameColumn" text="First Name" prefWidth="300"/>
+            <TableColumn fx:id="lastNameColumn" text="Last Name" prefWidth="300"/>
+            <TableColumn fx:id="emailColumn" text="Email" prefWidth="200"/>
+        </columns>
+    </TableView>
+
+    <!-- Section for Add New Patron -->
+    <Label text="Add New" style="-fx-font-size: 18px; -fx-font-weight: bold; margin-top: 20px;-fx-text-alignment: center"/>
+
+    <!-- AnchorPane for input fields and buttons -->
+    <AnchorPane>
+        <VBox layoutX="20" layoutY="20" spacing="10">
+            <TextField fx:id="patronFirstName" promptText="First Name"/>
+            <TextField fx:id="patronLastName" promptText="Last Name"/>
+            <TextField fx:id="patronEmail" promptText="Email"/>
+        </VBox>
+        <HBox layoutX="20" layoutY="150" spacing="10">
+            <Button text="Add" onAction="#handleAddPatron"/>
+            <Button text="Update" onAction="#handleUpdatePatron"/>
+            <Button text="Delete" onAction="#handleDeletePatron"/>
+        </HBox>
+    </AnchorPane>
+
+</VBox>

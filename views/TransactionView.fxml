@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox prefHeight="550" prefWidth="2000" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TransactionsController">
+
+    <HBox spacing="10" style="-fx-padding: 10px;">
+        <Label style="-fx-font-size: 18px; -fx-font-weight: bold; margin-bottom: 10px;" text="Transaction Management" />
+        <TextField fx:id="searchField" promptText="Search transaction." />
+        <Button onAction="#handleSearch" text="Search" />
+    </HBox>
+
+    <TableView fx:id="transactionsTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="transactionIDColumn" prefWidth="150" text="Transaction ID" />
+            <TableColumn fx:id="bookIDColumn" prefWidth="150" text="Book ID" />
+            <TableColumn fx:id="patronIDColumn" prefWidth="150" text="Patron ID" />
+            <TableColumn fx:id="bookTitleColumn" prefWidth="200" text="Book Title" />
+            <TableColumn fx:id="patronFirstNameColumn" prefWidth="150" text="Patron FirstName" />
+            <TableColumn fx:id="patronLastNameColumn" prefWidth="150" text="Patron LastName" />
+            <TableColumn fx:id="transactionDateColumn" prefWidth="150" text="Transaction Date" />
+            <TableColumn fx:id="dueDateColumn" prefWidth="180" text="Due Date" />
+            <TableColumn fx:id="returnedColumn" prefWidth="100" text="Returned">
+            </TableColumn>
+        </columns>
+    </TableView>
+
+    <!-- Fields for transaction details -->
+    <HBox spacing="10" style="-fx-padding: 10px;">
+        <TextField fx:id="transactionId" prefWidth="100" promptText="Transaction ID" />
+        <TextField fx:id="transactionBookId" prefWidth="100" promptText="Book ID" />
+        <TextField fx:id="transactionPatronId" prefWidth="100" promptText="Patron ID" />
+        <TextField fx:id="transactionDate" prefWidth="250" promptText="Transaction Date (yyyy-mm-dd hh:mm:ss)" />
+        <TextField fx:id="transactionDueDate" prefWidth="150" promptText="Due Date (yyyy-mm-dd)" />
+        <CheckBox fx:id="returnedCheckBox" text="Returned" />
+        <Button fx:id="updateButton" onAction="#handleUpdateTransaction" text="Update Transaction" />
+        <Button fx:id="deleteButton" onAction="#handleDeleteTransaction" text="Delete Transaction" />
+    </HBox>
+
+</VBox>
