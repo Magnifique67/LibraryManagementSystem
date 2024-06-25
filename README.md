@@ -33,7 +33,7 @@ The **Library Management System (LMS)** is designed to streamline the operations
     - The system should allow for one or more due date extensions, subject to librarian approval.
 
 4. **Search Books**
-    - Patrons can search for books by various attributes such as title, author, genre, or publication year.
+    - Patrons can search for books by various attributes such as title, isbn,  publication year.
 
 ## **Non-Functional Requirements**
 

@@ -136,59 +136,6 @@ public class BooksModel {
         }
     }
 
-    public void removeAuthorFromBook(int bookId, int authorId) throws SQLException {
-        String query = "DELETE FROM AuthorsBooks WHERE book_id = ? AND author_id = ?";
-        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-            pstmt.setInt(1, bookId);
-            pstmt.setInt(2, authorId);
-            pstmt.executeUpdate();
-        }
-    }
-
-    public LinkedList<Authors> getAuthorsForBook(int bookId) throws SQLException {
-        LinkedList<Authors> authors = new LinkedList<>();
-        String query = "SELECT a.id, a.First_Name, a.Last_Name FROM Authors a INNER JOIN AuthorsBooks ab ON a.id = ab.author_id WHERE ab.book_id = ?";
-        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-            pstmt.setInt(1, bookId);
-            ResultSet rs = pstmt.executeQuery();
-            while (rs.next()) {
-                Authors author = new Authors(
-                        rs.getInt("id"),
-                        rs.getString("First_Name"),
-                        rs.getString("Last_Name"),
-                        rs.getString("Email")
-                );
-                authors.add(author);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            // Log or handle the exception appropriately
-        }
-        return authors;
-    }
-
-    public LinkedList<Books> getBooksForAuthor(int authorId) throws SQLException {
-        LinkedList<Books> books = new LinkedList<>();
-        String query = "SELECT b.id, b.title, b.published_date, b.isbn, b.availability FROM Books b INNER JOIN AuthorsBooks ab ON b.id = ab.book_id WHERE ab.author_id = ?";
-        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-            pstmt.setInt(1, authorId);
-            ResultSet rs = pstmt.executeQuery();
-            while (rs.next()) {
-                Books book = new Books(
-                        rs.getInt("id"),
-                        rs.getString("title"),
-                        rs.getDate("published_date"),
-                        rs.getString("isbn"),
-                        rs.getBoolean("availability")
-                );
-                books.add(book);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            // Log or handle the exception appropriately
-        }
-        return books;
-    }
     public LinkedList<Books> searchBooks(String searchTerm) throws SQLException {
         LinkedList<Books> books = new LinkedList<>();
         String searchSQL = "SELECT DISTINCT b.* FROM Books b "
@@ -221,7 +168,7 @@ public class BooksModel {
     }
     public Books getBookById(int bookId) throws SQLException {
         String query = "SELECT * FROM Books WHERE id = ?";
-        Books book = null; // Initialize the book variable outside the try-catch block
+        Books book = null;
 
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setInt(1, bookId);
@@ -238,7 +185,7 @@ public class BooksModel {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            throw e; // Re-throw the SQLException so that the caller can handle it
+            throw e;
         }
 
         return book; // Return the book variable

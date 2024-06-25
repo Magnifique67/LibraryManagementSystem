@@ -67,29 +67,6 @@ public class AuthorBooks {
         return authors;
     }
 
-    public LinkedList<Books> getBooksForAuthor(int authorId) throws SQLException {
-        LinkedList<Books> books = new LinkedList<>();
-        String query = "SELECT b.id, b.title, b.published_date, b.isbn, b.availability FROM Books b INNER JOIN AuthorsBooks ba ON b.id = ba.book_id WHERE ba.author_id = ?";
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-            stmt.setInt(1, authorId);
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                Books book = new Books(
-                        rs.getInt("id"),
-                        rs.getString("title"),
-                        rs.getDate("published_date"),
-                        rs.getString("isbn"),
-                        rs.getBoolean("availability")
-                );
-                books.add(book);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return books;
-    }
-
     public static void main(String[] args) {
         createTable();
     }

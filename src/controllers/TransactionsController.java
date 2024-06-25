@@ -139,7 +139,7 @@ public class TransactionsController {
     @FXML
     private void handleSearch() {
         // Implement search functionality here
-        // You can use the searchField.getText() to get the search query
+        // You can use the searchField
     }
 
     private void clearFields() {

@@ -83,30 +83,6 @@ public class AuthorsModel {
         }
     }
 
-    public Authors getAuthorById(int authorId) {
-        String selectAuthor = "SELECT id, First_Name, Last_Name, mail FROM Authors WHERE id=?";
-        Authors author = null;
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement pstm = conn.prepareStatement(selectAuthor)) {
-            pstm.setInt(1, authorId);
-            try (ResultSet rs = pstm.executeQuery()) {
-                if (rs.next()) {
-                    author = new Authors(
-                            rs.getInt("id"),
-                            rs.getString("First_Name"),
-                            rs.getString("Last_Name"),
-                            rs.getString("email")
-                    );
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return author;
-    }
-//    public static void main(String[] args) {
-//        createTable();
-//    }
 
 
     }
