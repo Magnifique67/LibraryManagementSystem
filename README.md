@@ -101,10 +101,6 @@ The **Library Management System (LMS)** is designed to streamline the operations
 - **Librarian**: An authorized user who can manage books and oversee patron transactions.
 - **Patron**: A user who can borrow and return books, update due dates, and search for books.
 - **Book Status**: The current state of a book, such as available or borrowed.
-## You have to create account to access library:
-- but for librarian i have only one.
-- **Credentials for him**:
-- **username**:admin
-- **password**:12345
+## You have to create account to access library
 
 
